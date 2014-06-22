@@ -1,0 +1,45 @@
+.information
+{
+	margin-left: 30%;
+	margin-right: 30%;
+}
+
+.information > h1
+{
+	color : #08F;
+	border-color: black;
+	text-shadow: 1px 1px 0px gray;
+}
+
+.information > dl>dd > b
+{
+	color : red;
+	border-color: black;
+}
+
+.information >h3
+{
+	color : #333;
+	text-shadow: 1px 1px 0px gray;
+	margin-left : 30;
+}
+
+.information>a
+{
+	margin-left: 80%;
+}
+
+#h2
+{
+	color : #08F;
+	border-color: black;
+	text-shadow: 1px 1px 0px gray;
+}
+
+#h3
+{
+	color : #88F;
+	border-color: black;
+	text-shadow: 1px 1px 0px gray;
+}
+
