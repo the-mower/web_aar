@@ -303,114 +303,10 @@ public class BDUser {
 
 	//ajout d'un ami A l'aide de son id 
 	public static void addFriend(String key, String id_friend) {
-		//		Connection c=null;
-		//		Statement st=null;
-		//		try {
-		//			int id_user=getUserByKey(key); //soit on fait une exception au lieu de renvoyer -1 dans la fonction, soit on crée une exception dans cette fct comme suit
-		//			if (sessionPerimee(key)||(id_user==-1)){//on crée une erreur pour sortir direct et fermer la connection avec finally
-		//				throw new EndOfSessionException("Session terminée"); 
-		//			}
-		//			Class.forName("com.mysql.jdbc.driver");
-		//			c = DBStatic.getMysqlConnection();
-		//			st = c.createStatement();
-		//			st.executeUpdate("INSERT into Friends values("+id_user+","+id_friend+")");
-		//		} catch (ClassNotFoundException e) {
-		//			e.printStackTrace();
-		//		} catch (SQLException e) {
-		//			e.printStackTrace();
-		//		} catch (KeyUndefinedException e) {
-		//			e.printStackTrace();
-		//		} catch (EndOfSessionException e) {
-		//			e.printStackTrace();
-		//		}catch (Exception e){
-		//			e.printStackTrace();
-		//		}
-		//		finally{
-		//			try {
-		//				st.close();
-		//				c.close();
-		//			} catch (SQLException e) {
-		//				e.printStackTrace();
-		//			}
-		//		}
+		
 	}
 
-	//renvoie vrai si la session est périmée, sinon faux
-	private static boolean sessionPerimee(String key) {
-		//		Connection c=null;
-		//		Statement st=null;
-		//		try {
-		//			Class.forName("com.mysql.jdbc.driver");
-		//			c = DBStatic.getMysqlConnection();
-		//			st = c.createStatement();
-		//			int id_user = getUserByKey(key);
-		//			ResultSet r = st.executeQuery("SELECT * FROM Sessions WHERE id_user_key="+id_user+" AND peremption<NOW()");
-		//			if (!r.next()){
-		//				throw new EndOfSessionException("Session valide introuvable pour cet utilisateur");
-		//			}
-		//			else{
-		//				st.close();
-		//				c.close();
-		//				return true;
-		//			}
-		//		} catch (ClassNotFoundException e) {
-		//			e.printStackTrace();
-		//		} catch (SQLException e) {
-		//			e.printStackTrace();
-		//		} catch (KeyUndefinedException e) {
-		//			e.printStackTrace();
-		//		} catch (EndOfSessionException e) {
-		//			e.printStackTrace();
-		//		}catch (Exception e){
-		//			e.printStackTrace();
-		//		}
-		//		finally{
-		//			try {
-		//				st.close();
-		//				c.close();
-		//			} catch (SQLException e) {
-		//				e.printStackTrace();
-		//			}
-		//		}
-		return false;
-	}
 
-	//renvoie une exception si elle ne trouve pas la clé, sinon renvoie l'id associé à la clé
-	private static int getUserByKey(String key) throws KeyUndefinedException {
-		//		Connection c=null;
-		//		Statement st=null;
-		//		try {
-		//			Class.forName("com.mysql.jdbc.driver");
-		//			c = DBStatic.getMysqlConnection();
-		//			st = c.createStatement();
-		//			ResultSet r = st.executeQuery("SELECT * FROM Users WHERE key="+key);
-		//			if (!r.next()){
-		//				st.close();
-		//				c.close();
-		//				throw new KeyUndefinedException("Cles introuvable");
-		//			}
-		//			else{
-		//				st.close();
-		//				c.close();
-		//				return new Integer(r.getString("id")).intValue();
-		//			}
-		//		} catch (ClassNotFoundException e) {
-		//			e.printStackTrace();
-		//		} catch (SQLException e) {
-		//			e.printStackTrace();
-		//		}catch (Exception e){
-		//			e.printStackTrace();
-		//		}
-		//		finally{
-		//			try {
-		//				st.close();
-		//				c.close();
-		//			} catch (SQLException e) {
-		//				e.printStackTrace();
-		//			}
-		//		}
-		return -1;
-	}
 
 	public static void removeFriend(String key, String id_friend) {
 		//		Connection c=null;
@@ -447,31 +343,8 @@ public class BDUser {
 
 	//ajout d'un commentaire à la base NOSQL
 	public static void addcomment(String key, String text) {
-		try {
-			int id=getUserByKey(key); 
-			if (sessionPerimee(key)||(id==-1)){//on crée une erreur pour sortir directement
-				throw new EndOfSessionException("Session terminee");
-			}
-			Mongo m = new Mongo("132.227.201.134",27017);
-			DB db = m.getDB("li328");
-			DBCollection coll = db.getCollection("binome10");
-			BasicDBObject com = new BasicDBObject();
-			com.put("auteur", id);
-			com.put("texte", text);
-			GregorianCalendar cal = new GregorianCalendar();
-			Date d = cal.getTime();
-			com.put("date", d);
-			coll.insert(com);
-		}catch (EndOfSessionException e){
-			e.printStackTrace();
-		}catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (MongoException e) {
-			e.printStackTrace();
-		}catch (Exception e){
-			e.printStackTrace();
-		}
 	}
+	
 	/*
 	//recherche de commentaires par mots clés !
 	public static String search(String key, String query, String friends) {//friends = 1 si cochée, sinon 0
