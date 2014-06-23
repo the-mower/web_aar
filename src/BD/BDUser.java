@@ -1,12 +1,14 @@
 package BD;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -171,30 +173,19 @@ public class BDUser {
 			db = DBStatic.getMongoDb();
 
 			DBCollection collection = db.getCollection("friends");	// selection de la collection voulue
-			BasicDBObject searchQuery = new BasicDBObject("nom_1", nom).append("prenom_1", prenom);	// creation du champs recherchE
-
+			BasicDBObject searchQuery = new BasicDBObject("nom", nom).append("prenom", prenom);	// creation du champs recherchE
 			DBCursor cursor = collection.find(searchQuery);		// recherche du champs au sein de la base
 
-			// transformation des donnEes en map
-			List<DBObject> tab = cursor.toArray();
+			if (cursor.size()!=0){
+				BasicDBList e = (BasicDBList) cursor.next().get("friends");	// rEcupe de la liste d'amis
 
-			for (DBObject dbObject : tab) {
-				result+="<tr><td><form action='GetProfil' method='post'>"
-						+ "<input type='hidden' name='patronyme' value='"+dbObject.get("prenom_2")+" "+dbObject.get("nom_2")+"' /> "
-						+ "<input type='submit' value='"+dbObject.get("prenom_2")+" "+dbObject.get("nom_2")+"'></form></tr></td>";
-			}
+				for (Object object : e) {
+					BasicDBObject b = (BasicDBObject) object;
 
-			searchQuery = new BasicDBObject("nom_2", nom).append("prenom_2", prenom);	// creation du champs recherchE
-
-			cursor = collection.find(searchQuery);		// recherche du champs au sein de la base
-
-			// transformation des donnEes en map
-			tab = cursor.toArray();
-
-			for (DBObject dbObject : tab) {
-				result+="<tr><td><form action='GetProfil' method='post'>"
-						+ "<input type='hidden' name='patronyme' value='"+dbObject.get("prenom_1")+" "+dbObject.get("nom_1")+"' /> "
-						+ "<input type='submit' value='"+dbObject.get("prenom_1")+" "+dbObject.get("nom_1")+"'></form></tr></td>";
+					result+="<tr><td><form action='GetProfil' method='post'>"
+							+ "<input type='hidden' name='patronyme' value='"+b.get("prenom")+" "+b.get("nom")+"' /> "
+							+ "<input type='submit' value='"+b.get("prenom")+" "+b.get("nom")+"'></form></tr></td>";
+				}
 			}
 
 		} catch (UnknownHostException e) {
@@ -230,20 +221,20 @@ public class BDUser {
 			db = DBStatic.getMongoDb();
 			DBCollection collection = db.getCollection("friends");	// selection de la collection voulue
 
-			BasicDBObject searchQuery = new BasicDBObject("nom_1", nom_1).append("prenom_1", prenom_1).append("nom_2", nom_2).append("prenom_2", prenom_2);	// creation du champs recherchE
+			BasicDBObject searchQuery = new BasicDBObject("nom", nom_1).append("prenom", prenom_1);	// creation du champs recherchE
 			DBCursor cursor = collection.find(searchQuery);		// recherche du champs au sein de la base
 
-			if (cursor.count() != 0){
-				db.getMongo().close();
-				return true;
-			}
+			if (cursor.size() !=0){
+				BasicDBList e = (BasicDBList) cursor.next().get("friends");	// rEcupe de la liste d'amis
 
-			searchQuery = new BasicDBObject("nom_2", nom_1).append("prenom_2", prenom_1).append("nom_1", nom_2).append("prenom_1", prenom_2);	// creation du champs recherchE
-			cursor = collection.find(searchQuery);
-
-			if (cursor.count() != 0){
-				db.getMongo().close();
-				return true;
+				for (Object object : e) {
+					BasicDBObject b = (BasicDBObject) object;
+					
+					if (b.get("nom").toString().equals(nom_2) && b.get("prenom").toString().equals(prenom_2)){
+						db.getMongo().close();
+						return true;
+					}
+				}
 			}
 
 		} catch (UnknownHostException e) {
@@ -301,50 +292,62 @@ public class BDUser {
 		return result;
 	}
 
-	//ajout d'un ami A l'aide de son id 
-	public static void addFriend(String key, String id_friend) {
-		
-	}
+	/**
+	 * Ajoute un ami A la liste des amis d'un utilisateur
+	 * @param nom_1
+	 * @param prenom_1
+	 * @param login_1
+	 * @param nom_2
+	 * @param prenom_2
+	 * @param login_2
+	 * @throws Exception
+	 */
+	public static void addFriend(String nom_1, String prenom_1, String login_1, String nom_2, String prenom_2, String login_2) throws Exception{
+System.out.println(nom_1+" "+prenom_1+" "+login_1+", "+nom_2+" "+prenom_2+" "+login_2);
+		DB db=null;
 
+		try {
+			db = DBStatic.getMongoDb();
+			DBCollection collection = db.getCollection("friends");	// selection de la collection voulue
 
+			BasicDBObject searchQuery = new BasicDBObject("nom", nom_1).append("prenom", prenom_1).append("login", login_1);	// creation du champs recherchE
+			DBCursor cursor = collection.find(searchQuery);		// recherche du champs au sein de la base
+			BasicDBObject friendToInsert = new BasicDBObject("nom", nom_2).append("prenom", prenom_2).append("login", login_2); // creation du champ A insErer
 
-	public static void removeFriend(String key, String id_friend) {
-		//		Connection c=null;
-		//		Statement st=null;
-		//		try {
-		//			int id_user=getUserByKey(key);
-		//			if (sessionPerimee(key)||(id_user==-1)){//on crée une erreur pour sortir directement et fermer la connection avec finally
-		//				throw new EndOfSessionException("Session terminee"); 
-		//			}
-		//			Class.forName("com.mysql.jdbc.driver");
-		//			c = DBStatic.getMysqlConnection();
-		//			st = c.createStatement();
-		//			st.executeUpdate("DELETE FROM Friends WHERE id_from="+id_user+" AND id_to="+id_friend);
-		//		} catch (ClassNotFoundException e) {
-		//			e.printStackTrace();
-		//		} catch (SQLException e) {
-		//			e.printStackTrace();
-		//		} catch (KeyUndefinedException e) {
-		//			e.printStackTrace();
-		//		} catch (EndOfSessionException e) {
-		//			e.printStackTrace();
-		//		}catch (Exception e){
-		//			e.printStackTrace();
-		//		}
-		//		finally{
-		//			try {
-		//				st.close();
-		//				c.close();
-		//			} catch (SQLException e) {
-		//				e.printStackTrace();
-		//			}
-		//		}
+			if (cursor.count() != 0){	// l'utilisateur possEde deja des amis dans la BD
+
+				BasicDBObject updateCommand = new BasicDBObject("$push", new BasicDBObject("friends", friendToInsert));	//	selection du tableau
+				collection.update(searchQuery, updateCommand);
+
+			}else{	// l'utilisateur ne possEde aucun ami dans la BD
+
+				List<BasicDBObject> friendsList = new ArrayList<>();
+				friendsList.add(friendToInsert);
+				searchQuery.put("friends", friendsList);
+				collection.insert(searchQuery);
+			}
+
+			db.getMongo().close();	//	fermeture de la connexion
+
+		} catch (UnknownHostException e) {
+			db.getMongo().close();
+			throw new Exception("Probleme serveur. Veuillez refaire votre demande");
+		}
+		finally{	// fermeture de la connection
+			try{
+				if (db!=null){
+					db.getMongo().close();
+				}
+			}catch (Exception e){
+				throw new Exception("Probleme serveur. Veuillez refaire votre demande");
+			}
+		}
 	}
 
 	//ajout d'un commentaire à la base NOSQL
 	public static void addcomment(String key, String text) {
 	}
-	
+
 	/*
 	//recherche de commentaires par mots clés !
 	public static String search(String key, String query, String friends) {//friends = 1 si cochée, sinon 0

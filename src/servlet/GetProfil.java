@@ -47,21 +47,22 @@ public class GetProfil extends HttpServlet {
 		boolean are_friends = false;
 
 		/* Récupération des champs du formulaire. */
-		String user = (String) session.getAttribute("user");
+		String user_connect = (String) session.getAttribute("user");
 		String patronyme = request.getParameter( "patronyme" );		// ce champs est composé du prenom et nom du profil qu'il faut afficher
-		String[] patronyme_connecte = patronyme.split(" "),
-				patronyme_profil = user.split(" ");
+		String[] patronyme_profil = patronyme.split(" "),
+				patronyme_connecte = user_connect.split(" ");
 
 		try {
-			infos = BDUser.getInfoUser(patronyme_connecte[1], patronyme_connecte[0]);
-			liste_amis = BDUser.getFriendsUser(patronyme_connecte[1], patronyme_connecte[0]);
+			infos = BDUser.getInfoUser(patronyme_profil[1], patronyme_profil[0]);
+			liste_amis = BDUser.getFriendsUser(patronyme_profil[1], patronyme_profil[0]);
 			are_friends = BDUser.areFriends(patronyme_connecte[1], patronyme_connecte[0], patronyme_profil[1], patronyme_profil[0]);
 		} catch (Exception e) {
 			resultat= e.getMessage();
 		}
 
-		if (user.equals(patronyme) || are_friends)
+		if (user_connect.equals(patronyme) || are_friends){
 			is_my_friend="1";
+		}
 		
 		/* Stockage du résultat et des messages d'erreur dans l'objet request */
 		request.setAttribute( ATT_RESULTAT, resultat );

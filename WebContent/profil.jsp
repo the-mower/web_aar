@@ -11,6 +11,9 @@
 	String user = null;
 	String user_profil = null;
 	String are_friends = "0";
+	String nom_profil = null;
+	String prenom_profil = null;
+	String login_profil = null;
 
 	if (session.getAttribute("user") == null) {
 		response.sendRedirect("connexion.jsp");
@@ -18,6 +21,9 @@
 		user = (String) session.getAttribute("user"); // user <=> prenom nom
 		user_profil = (String) request.getAttribute("user_profil");
 		are_friends = (String) request.getAttribute("is_my_friend");
+		nom_profil = (String) request.getAttribute("nom");
+		prenom_profil = (String) request.getAttribute("prenom");
+		login_profil = (String) request.getAttribute("login");
 	}
 	String userName = null;
 	String sessionID = null;
@@ -84,7 +90,25 @@ body {
 	<div id="page">
 		<div id="stat">
 			<span> <I> Informations personnelles : </I> <br>
-				<table name="zone_recherche" id="zone_recherche">
+				<form action="<%=response.encodeURL("AddFriend")%>" method="post" name="zone_recherche" id="zone_recherche">
+					<input type="hidden" name="patronyme" value="<%=user_profil%>" /> 
+					<input type="hidden" name="nom_profil" value="<%=nom_profil%>" />Nom : ${nom} <br>
+					<input type="hidden" name="prenom_profil" value="<%=prenom_profil%>" />Prenom : ${prenom} <br>
+					<input type="hidden" name="login_profil" value="<%=login_profil%>" />Login : ${login}<br>
+					<%
+						if (!are_friends.equals("1")) {
+					%>
+					<span style="text-align: right;">
+							<input type="submit" value="Ajouter comme ami(e)" />
+					</span>
+					<%
+						} else {
+					%>
+					<br>
+					<%
+						}
+					%>
+				</form> <%-- <table name="zone_recherche" id="zone_recherche">
 					<tr>
 						<td><font color="white">Nom : ${nom}</font></td>
 					</tr>
@@ -94,26 +118,11 @@ body {
 					<tr>
 						<td><font color="white">Login : ${login}</font></td>
 					</tr>
-				</table>
+				</table> --%>
 			</span>
 
 			<!-- Ajouter comme ami s'il le faut -->
-			<%
-				if (!are_friends.equals("1")) {
-			%>
-			<span style="text-align: right;">
-				<form action="<%=response.encodeURL("AddFriend")%>" method="post">
-					<input type="hidden" name="login" value="<%=user_profil%>" /> <input
-						type="submit" value="Ajouter comme ami(e)" />
-				</form>
-			</span>
-			<%
-				} else {
-			%>
-			<br>
-			<%
-				}
-			%>
+
 
 			<!-- listes d'amis -->
 			<span> <I> Liste d'amis : </I>

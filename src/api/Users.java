@@ -42,39 +42,39 @@ public class Users {
 		return BDUser.getInfoUser(login, null);	// renvoie les informations relatives A l'utilisateur
 	}
 
-	public static JSONObject addFriend(String key, String id_friend) {
-		if (key == null || id_friend == null)
-		{
-			return Tools.erreur("Parametre manquant");//retourne un objet JSON avec un champ erreur ayant pour valeur "parametre manquant"
-		}
-		else{
-			BDUser.addFriend(key, id_friend);
-			JSONObject json = new JSONObject();
-			try {
-				json.put ("output" ,"OK" );
-			} catch ( JSONException e ) {
-				return Tools.erreur(e.getMessage());
-			}
-			return json;
-		}
-	}
+//	public static JSONObject addFriend(String key, String id_friend) {
+//		if (key == null || id_friend == null)
+//		{
+//			return Tools.erreur("Parametre manquant");//retourne un objet JSON avec un champ erreur ayant pour valeur "parametre manquant"
+//		}
+//		else{
+//			BDUser.addFriend(key, id_friend);
+//			JSONObject json = new JSONObject();
+//			try {
+//				json.put ("output" ,"OK" );
+//			} catch ( JSONException e ) {
+//				return Tools.erreur(e.getMessage());
+//			}
+//			return json;
+//		}
+//	}
 
-	public static JSONObject removeFriend(String key, String id_friend) {
-		if (key == null || id_friend == null)
-		{
-			return Tools.erreur("Parametre manquant");//retourne un objet JSON avec un champ erreur ayant pour valeur "parametre manquant"
-		}
-		else{
-			BDUser.removeFriend(key, id_friend);
-			JSONObject json = new JSONObject();
-			try {
-				json.put ("output" ,"OK" );
-			} catch ( JSONException e ) {
-				return Tools.erreur(e.getMessage());
-			}
-			return json;
-		}
-	}
+//	public static JSONObject removeFriend(String key, String id_friend) {
+//		if (key == null || id_friend == null)
+//		{
+//			return Tools.erreur("Parametre manquant");//retourne un objet JSON avec un champ erreur ayant pour valeur "parametre manquant"
+//		}
+//		else{
+//			BDUser.removeFriend(key, id_friend);
+//			JSONObject json = new JSONObject();
+//			try {
+//				json.put ("output" ,"OK" );
+//			} catch ( JSONException e ) {
+//				return Tools.erreur(e.getMessage());
+//			}
+//			return json;
+//		}
+//	}
 
 	public static JSONObject Logout() {
 		JSONObject json = new JSONObject();

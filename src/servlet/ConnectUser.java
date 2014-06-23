@@ -63,6 +63,7 @@ public class ConnectUser extends HttpServlet {
 			String user = infos.get("prenom")+" "+infos.get("nom");
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            session.setAttribute("login", login);
             session.setMaxInactiveInterval(30*60);	//	setting session to expiry in 30 mins
             
             Cookie userName = new Cookie("user", user);
